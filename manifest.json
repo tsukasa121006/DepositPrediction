@@ -1,5 +1,5 @@
 {
-  "name": "口座取引・未来残高",
+  "name": "預金管理",
   "short_name": "残高シミュレーション",
   "start_url": "./index.html",
   "display": "standalone",
