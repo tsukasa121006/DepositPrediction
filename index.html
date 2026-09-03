@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>口座取引可視化・未来残高シミュレーター</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="残高アプリ">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <!-- ヘッダーエリア -->
+  <div class="header-panel">
+    <div class="total-balance-wrapper">
+      <!-- 総資産グループ -->
+      <div class="balance-item">
+        <span class="total-balance-label">総資産金額</span>
+        <span class="total-balance-amount" id="totalAssetsDisplay">¥0</span>
+      </div>
+
+      <!-- 預金グループ -->
+      <div class="balance-item">
+        <span class="deposit-label">預金金額</span>
+        <div class="deposit-input-wrapper">
+          <span class="currency-symbol">¥</span>
+          <input type="text" id="depositBalanceInput" class="deposit-amount-input" title="直接入力して編集できます">
+        </div>
+      </div>
+    </div>
+
+    <!-- 今日の取引エリア -->
+    <div class="today-transactions-card">
+      <header>今日の取引</header>
+      <ul class="today-list" id="todayTransactionsList">
+        <li style="color: var(--text-muted);">本日の予定取引はありません</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- メインエリア -->
+  <div class="main-content">
+    <!-- 左側：未来予定テーブル -->
+    <div class="panel">
+      <!-- タブ切り替え -->
+      <div class="tabs-header" id="tabsHeader"></div>
+
+      <div class="tab-summary">
+        <span>合計金額</span>
+        <span id="tabTotalDisplay">¥0</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">日付</th>
+              <th style="width: 25%;">内容</th>
+              <th style="width: 20%;">金額</th>
+              <th style="width: 25%;">予測残高</th>
+              <th style="width: 5%;"></th>
+            </tr>
+          </thead>
+          <tbody id="scheduleTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- 丸型追加ボタン -->
+      <button class="fab-btn" id="addScheduleBtn" title="予定を追加">＋</button>
+    </div>
+
+    <!-- 右側：未確定取引メモ -->
+    <div class="panel">
+      <div class="panel-title">未確定取引メモ</div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 45%;">内容</th>
+              <th style="width: 30%;">金額</th>
+              <th style="width: 25%;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="memoTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- 丸型追加ボタン -->
+      <button class="fab-btn" id="addMemoBtn" title="メモを追加">＋</button>
+    </div>
+  </div>
+</div>
+
+<!-- 昇格モーダル -->
+<div id="promoteModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">予定日を選択</div>
+    <div class="modal-body">
+      <p id="modalMemoTitle" style="margin-bottom: 12px; font-weight: bold;"></p>
+      <label for="modalDateInput" style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">取引予定日</label>
+      <input type="date" id="modalDateInput" class="modal-date-picker">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal btn-cancel" id="closeModalBtn">キャンセル</button>
+      <button class="btn-modal btn-confirm" id="confirmPromoteBtn">決定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 共通タブモーダル（追加・編集兼用） -->
+<div id="tabModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" id="tabModalHeader">タブの編集</div>
+    <div class="modal-body">
+      <label for="tabModalNameInput" style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">タブ名</label>
+      <input type="text" id="tabModalNameInput" class="modal-date-picker" placeholder="タブ名を入力">
+    </div>
+    <div class="modal-footer" style="justify-content: space-between;">
+      <button class="btn-modal btn-danger" id="deleteTabBtn">削除</button>
+      <div style="display: flex; gap: 10px; margin-left: auto;">
+        <button class="btn-modal btn-cancel" id="closeTabModalBtn">キャンセル</button>
+        <button class="btn-modal btn-confirm" id="saveTabModalBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
