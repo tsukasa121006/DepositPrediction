@@ -38,7 +38,12 @@
           <input type="text" id="depositBalanceInput" class="deposit-amount-input" title="直接入力して編集できます">
         </div>
       </div>
+
+      <button type="button" class="data-manage-btn" id="openDataModalBtn" title="バックアップの書き出し・復元">💾 データ管理</button>
     </div>
+
+    <!-- データ保存に関するお知らせ -->
+    <div id="dataNotice" class="data-notice" role="status" hidden></div>
 
     <!-- 今日の取引エリア -->
     <div class="today-transactions-card">
@@ -136,6 +141,46 @@
     </div>
   </div>
 </div>
+
+<!-- データ管理モーダル -->
+<div id="dataModal" class="modal-overlay">
+  <div class="modal-content data-modal-content">
+    <div class="modal-header">データ管理</div>
+    <div class="modal-body">
+      <section class="data-section">
+        <h3 class="data-section-title">保存の状態</h3>
+        <dl class="status-list">
+          <dt>自動削除の防止</dt>
+          <dd id="persistStatus" class="status-value">確認中…</dd>
+          <dt>最後のバックアップ</dt>
+          <dd id="lastExportStatus" class="status-value">-</dd>
+        </dl>
+      </section>
+
+      <section class="data-section">
+        <h3 class="data-section-title">バックアップファイル</h3>
+        <p class="data-section-note">データをファイルとして端末に保存します。Googleドライブなどにも保存しておくと安心です。</p>
+        <div class="data-actions">
+          <button type="button" class="btn-modal btn-confirm" id="exportBackupBtn">ファイルに書き出す</button>
+          <button type="button" class="btn-modal btn-cancel" id="shareBackupBtn" hidden>共有して保存</button>
+          <button type="button" class="btn-modal btn-cancel" id="importBackupBtn">ファイルから復元</button>
+        </div>
+        <input type="file" id="importFileInput" accept=".json,application/json" hidden>
+      </section>
+
+      <section class="data-section">
+        <h3 class="data-section-title">端末内の自動バックアップ</h3>
+        <p class="data-section-note">1日1回、直近7日分を自動で残しています。ブラウザのデータが削除されるとこちらも消えるため、ファイルへの書き出しも行ってください。</p>
+        <ul class="backup-list" id="backupList"></ul>
+      </section>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal btn-cancel" id="closeDataModalBtn">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="script.js"></script>
 </body>
