@@ -20,7 +20,8 @@ function createDefaultState() {
     ],
     activeTabId: 'tab_normal',
     schedules: [],
-    memos: []
+    memos: [],
+    salary: createDefaultSalary()
   };
 }
 
@@ -138,11 +139,14 @@ function normalizeState(raw) {
 
   state.activeTabId = tabIds.has(String(raw.activeTabId)) ? String(raw.activeTabId) : state.tabs[0].id;
 
+  state.salary = normalizeSalary(raw.salary);
+
   return state;
 }
 
 function hasUserData(state) {
-  return state.schedules.length > 0 || state.memos.length > 0 || state.depositBalance !== 0;
+  return state.schedules.length > 0 || state.memos.length > 0 || state.depositBalance !== 0 ||
+    (state.salary && Object.keys(state.salary.months).length > 0);
 }
 
 // =====================================================
@@ -249,6 +253,7 @@ function saveData() {
   if (previous) takeDailySnapshot(previous);
 
   const ok = safeSet(STORAGE_KEY, JSON.stringify(appState));
+  if (ok && loadStatus.source === 'none') loadStatus.source = 'main';
   if (ok !== !loadStatus.saveError) {
     loadStatus.saveError = !ok;
     renderNotice();
@@ -275,6 +280,7 @@ function settlePastSchedules() {
   // 計上前の状態を自動バックアップに残す（データ管理画面から戻せるように）
   takeForcedSnapshot('自動計上前');
 
+  past.forEach(onScheduleSettled); // 給与計算の予定なら「計上済み」として記録
   const total = past.reduce((sum, s) => sum + toNumber(s.amount, 0), 0);
   const pastIds = new Set(past.map(s => s.id));
   appState.depositBalance = toNumber(appState.depositBalance, 0) + total;
@@ -283,26 +289,39 @@ function settlePastSchedules() {
   return { count: past.length, total };
 }
 
+// result：settlePastSchedules() の戻り値、または processDailyTransition() の戻り値
 function notifySettlement(result) {
   if (!result) return;
-  const sign = result.total >= 0 ? '+' : '-';
-  showToast(`過ぎた予定 ${result.count}件を預金金額に計上しました（${sign}¥${Math.abs(result.total).toLocaleString()}）`);
+  const settlement = result.salaryAdded !== undefined ? result.settlement : result;
+  const messages = [];
+  if (result.salaryAdded) {
+    const a = result.salaryAdded;
+    messages.push(`${formatJpDate(a.date)}の給料（${formatYen(a.amount)}）を予定に追加しました`);
+  }
+  if (settlement) {
+    const sign = settlement.total >= 0 ? '+' : '-';
+    messages.push(`過ぎた予定 ${settlement.count}件を預金金額に計上しました（${sign}¥${Math.abs(settlement.total).toLocaleString()}）`);
+  }
+  messages.forEach((msg, i) => setTimeout(() => showToast(msg), i * 2600));
 }
 
 function processDailyTransition() {
   const todayStr = getTodayString();
   const dateChanged = appState.lastProcessDate !== todayStr;
   appState.lastProcessDate = todayStr;
+  ensureSalaryInitialized();
   // 何も見つからなかった状態では空データを保存しない（後から復元できる余地を残す）
   if (loadStatus.source === 'none') return null;
 
-  const result = settlePastSchedules();
+  // 毎月1日以降：今月の給料予定を追加 → 過ぎた予定を計上
+  const salaryAdded = autoAddSalarySchedule();
+  const settlement = settlePastSchedules();
 
   // 旧キーや自動バックアップから読み込んだ場合は、すぐに新しいキーへ保存する
-  if (result || dateChanged || loadStatus.source === 'legacy' || loadStatus.source === 'backup') {
+  if (salaryAdded || settlement || dateChanged || loadStatus.source === 'legacy' || loadStatus.source === 'backup') {
     saveData();
   }
-  return result;
+  return (salaryAdded || settlement) ? { salaryAdded, settlement } : null;
 }
 
 // アプリを開いたまま日付をまたいだ場合も計上する
@@ -312,7 +331,7 @@ function checkDayChange() {
   if (todayStr === lastCheckedDay) return;
   lastCheckedDay = todayStr;
   const result = processDailyTransition();
-  renderAll();
+  if (location.hash === '#salary') renderSalaryPage(); else renderAll();
   notifySettlement(result);
 }
 
@@ -1079,6 +1098,7 @@ loadData();
 renderAll();
 notifySettlement(pendingSettlement);
 requestPersistentStorage();
+initSalaryPage();
 
 // 日付の切り替わりをチェック（アプリに戻ってきたとき＋1分ごと）
 document.addEventListener('visibilitychange', () => {

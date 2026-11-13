@@ -21,6 +21,8 @@
 <body>
 
 <div class="container">
+ <!-- ===== 預金管理画面 ===== -->
+ <div class="view" id="depositView">
   <!-- ヘッダーエリア -->
   <div class="header-panel">
     <div class="total-balance-wrapper">
@@ -39,7 +41,10 @@
         </div>
       </div>
 
-      <button type="button" class="data-manage-btn" id="openDataModalBtn" title="バックアップの書き出し・復元">💾 データ管理</button>
+      <div class="header-actions">
+        <button type="button" class="data-manage-btn salary-open-btn" id="openSalaryBtn">💴 給与計算</button>
+        <button type="button" class="data-manage-btn" id="openDataModalBtn" title="バックアップの書き出し・復元">💾 データ管理</button>
+      </div>
     </div>
 
     <!-- データ保存に関するお知らせ -->
@@ -106,6 +111,28 @@
       <button class="fab-btn" id="addMemoBtn" title="メモを追加">＋</button>
     </div>
   </div>
+
+ </div>
+
+ <!-- ===== 給与計算画面 ===== -->
+ <div class="view" id="salaryView" hidden>
+  <div class="header-panel salary-header">
+    <div class="salary-header-top">
+      <button type="button" class="back-btn" id="backToDepositBtn">← 預金管理に戻る</button>
+      <h1 class="salary-title">給与計算</h1>
+    </div>
+    <div class="month-nav">
+      <button type="button" class="month-nav-btn" id="salaryPrevBtn" aria-label="前の月">◀</button>
+      <div class="month-nav-center">
+        <div class="month-nav-label" id="salaryMonthLabel"></div>
+        <div class="month-nav-sub" id="salaryPayDate"></div>
+      </div>
+      <button type="button" class="month-nav-btn" id="salaryNextBtn" aria-label="次の月">▶</button>
+    </div>
+    <button type="button" class="this-month-btn" id="salaryThisMonthBtn">今月に戻る</button>
+  </div>
+  <div id="salaryBody"></div>
+ </div>
 </div>
 
 <!-- 昇格モーダル -->
@@ -182,6 +209,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+<script src="salary.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

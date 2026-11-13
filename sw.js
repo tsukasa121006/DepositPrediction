@@ -1,10 +1,11 @@
 // アプリを更新したら、この番号を上げてください（古いキャッシュが削除されます）
 const CACHE_PREFIX = 'deposit-app-';
-const CACHE_NAME = CACHE_PREFIX + 'v2';
+const CACHE_NAME = CACHE_PREFIX + 'v3';
 const urlsToCache = [
   './',
   './index.html',
   './style.css',
+  './salary.js',
   './script.js',
   './manifest.json'
 ];

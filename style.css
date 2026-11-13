@@ -734,3 +734,428 @@ input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus {
     padding: 4px 10px;
   }
 }
+
+/* =====================================================
+   画面切り替え・ヘッダーのボタン
+   ===================================================== */
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.view[hidden] {
+  display: none;
+}
+
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.header-actions .data-manage-btn {
+  margin-left: 0;
+}
+
+.salary-open-btn {
+  background: #e3f2fd;
+  border-color: #bbdefb;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+/* =====================================================
+   給与計算画面
+   ===================================================== */
+.salary-header {
+  gap: 12px;
+}
+
+.salary-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  background: #f1f3f5;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  border-color: var(--primary-blue);
+}
+
+.salary-title {
+  font-size: 1.2rem;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.month-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  color: var(--primary-blue);
+  font-size: 0.95rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.month-nav-btn:hover {
+  background: #e3f2fd;
+}
+
+.month-nav-center {
+  text-align: center;
+  min-width: 180px;
+}
+
+.month-nav-label {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--primary-blue);
+}
+
+.month-nav-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.this-month-btn {
+  align-self: center;
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.salary-carry-note {
+  background: #fff3e0;
+  border-left: 5px solid #e65100;
+  color: #8a3b00;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.salary-carry-note[hidden] {
+  display: none;
+}
+
+.salary-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .salary-layout {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .salary-side {
+    position: sticky;
+    top: 20px;
+  }
+}
+
+.salary-inputs,
+.salary-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.salary-card {
+  min-height: 0;
+}
+
+.salary-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.salary-field-label {
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.salary-field-label small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.yen-input,
+.unit-input,
+.time-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.yen-input input {
+  width: 130px;
+}
+
+.unit-input input {
+  width: 80px;
+}
+
+.time-input input {
+  width: 60px;
+}
+
+.salary-calc-detail {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.salary-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 6px 0;
+}
+
+.salary-note-split {
+  margin-top: 14px;
+}
+
+.salary-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 4px 0 10px;
+}
+
+/* 手当 */
+.allowance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.allowance-item {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.allowance-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.allowance-row .allowance-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.allowance-row .yen-input input {
+  width: 110px;
+}
+
+.allowance-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 10px;
+}
+
+.salary-add-btn {
+  margin-top: 12px;
+  align-self: flex-start;
+  background: none;
+  border: 1px dashed var(--primary-blue);
+  color: var(--primary-blue);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.salary-add-btn:hover {
+  background: #e3f2fd;
+}
+
+/* スイッチ */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.switch-track {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 10px;
+  background: #cfd8dc;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--primary-blue);
+}
+
+.switch input:checked + .switch-track::after {
+  transform: translateX(14px);
+}
+
+.switch input:focus-visible + .switch-track {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+/* 計算結果 */
+.result-list {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.result-list dt {
+  color: var(--text-muted);
+}
+
+.result-list dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 500;
+}
+
+.result-strong {
+  font-size: 1.15rem;
+  font-weight: bold !important;
+}
+
+.take-home {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  font-weight: bold;
+  color: var(--income-color);
+}
+
+.take-home span:last-child {
+  font-size: 1.6rem;
+}
+
+.reflect-box {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reflect-status {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.reflect-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+/* 設定 */
+.salary-settings summary {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.salary-settings[open] summary {
+  margin-bottom: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch-track, .switch-track::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .month-nav-label {
+    font-size: 1.2rem;
+  }
+
+  .month-nav-center {
+    min-width: 0;
+  }
+
+  .yen-input input {
+    width: 110px;
+  }
+
+  .allowance-row .yen-input input {
+    width: 90px;
+  }
+
+  .take-home span:last-child {
+    font-size: 1.3rem;
+  }
+}
